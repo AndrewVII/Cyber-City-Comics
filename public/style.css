@@ -1,0 +1,60 @@
+@font-face {
+  font-family: comingSoon;
+  src: url('/static/ComingSoon-Regular.ttf');
+}
+
+.container {
+  position: relative;
+}
+
+.centered {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.captiontext {
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+}
+
+.bottomright {
+  text-align: right;
+  position: relative;
+  bottom: 0px;
+  right: 0px;
+}
+
+.bottomleft {
+  text-align: left;
+  position: relative;
+  bottom: 0px;
+  left: 0px;
+}
+
+.directional-button {
+  margin: 10px;
+}
+
+.header {
+  margin: 0;
+  border: 0;
+  padding: 20px;
+  background-color: rgb(201, 201, 201);
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+body {
+  text-align: center;
+  font-size: 100%;
+}
+
+* {
+  margin: 0;
+  font-family: 'comingSoon';
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/static/style.css" type="text/css">
+  <title>Cyber City Comics</title>
+</head>
+<div class="header">
+  <h1>Cyber City Comics</h1>
+</div>
+<body>
+  
+  <h2><%= title %></h2>
+  <div class="container">
+    <div class="centered">
+      <button type="button" id="prevComic" class="directional-button"><</button>
+      <div class="image">
+        <img src=<%= comicImg %> alt="<%= altText %>">
+        <div class="captiontext">
+          <div class="bottomleft">
+            date: <%= year %>-<%= month %>-<%= day %>
+          </div>
+          <div class="bottomright">
+            views: <%= comicViews %>
+          </div>
+        </div>
+      </div>
+      <button type="button" id="nextComic" class="directional-button">></button>
+    </div>
+  </div>
+  <br>
+  <p id="transcript"></p>
+  <br>
+  <button type="button" id="randomComic">Click for random comic</button>
+</body>
+</html>
+
+<script>
+  let currentComic = parseInt(<%= comicNum %>);
+  let leftBtn = document.getElementById("prevComic");
+  let rightBtn = document.getElementById("nextComic");
+  let randomBtn = document.getElementById("randomComic");
+  let transcript = document.getElementById("transcript");
+  let transcriptText = <%-JSON.stringify({transcript: transcript}) %>.transcript;
+
+  if (currentComic < 2){
+      leftBtn.parentNode.removeChild(leftBtn);
+  }
+  leftBtn.addEventListener("click", function() {
+    window.location.href = '/comic/' + (currentComic - 1).toString();
+  })
+
+  rightBtn.addEventListener("click", function() {
+    window.location.href = '/comic/' + (currentComic + 1).toString();
+  })
+
+  randomBtn.addEventListener("click", function() {
+    window.location.href = '/comic/' + Math.floor(Math.random() * 2473).toString();
+  })
+
+  if (transcriptText.length > 2){
+    transcriptText = transcriptText.replaceAll("<", "~,+=");
+    transcriptText = transcriptText.replaceAll(">", ".-~");
+    
+    if (transcriptText.includes("{{") && transcriptText.includes("}")){
+      let i = transcriptText.indexOf("{{") + "{{".length;
+      let startIndex = i - "{{".length;
+      let broken = false;
+      while (transcriptText[i] != '}'){
+        i++;
+        if (i > 20000){
+          broken = true;
+          break;
+        }
+      }
+      if (!broken){
+        transcriptText = transcriptText.slice(0,startIndex) + transcriptText.slice(i+2);
+      }
+    }
+    
+    transcriptText = "<i><strong>alt text: " + `<%= altText %>` + "</strong></i><br><br>" + '<div style="white-space: pre-line" id="transcriptText">' + transcriptText + '</div>';
+
+    transcript.insertAdjacentHTML('beforeend', transcriptText);
+
+    document.getElementById("transcriptText").textContent = document.getElementById("transcriptText").textContent.replaceAll("~,+=", "<");
+    document.getElementById("transcriptText").textContent = document.getElementById("transcriptText").textContent.replaceAll(".-~", ">");
+  }
+</script>
