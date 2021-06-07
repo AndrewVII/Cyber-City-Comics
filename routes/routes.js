@@ -1,12 +1,12 @@
 let express = require('express');
 let router = express.Router();
+const sqlite3 = require('sqlite3').verbose();
 
 router.get('/', function(req, res){
   res.render('index');
 });
 
 router.get('/comic/:comicNum', function(req, res){
-
   const https = require('https');
 
   https.get('https://xkcd.com/' + req.params.comicNum + '/info.0.json', (response) => {
@@ -24,7 +24,6 @@ router.get('/comic/:comicNum', function(req, res){
     response.on('end', () => {
       data = JSON.parse(data);
       let comicViews = 0;
-      const sqlite3 = require('sqlite3').verbose();
       const db = new sqlite3.Database('./db/comics.db');
       db.serialize(function() {
         db.run(`UPDATE comics SET views = views + 1 WHERE comic_number = ` + req.params.comicNum);
